@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="utf-8">
+	<title>Justify Blocker</title>
+	<link rel="shortcut icon" type="image/jpg" href="chrome-extension://faleafcoahdigncejihhjllmdagdlpjk/icon.png"/>
+	<link rel="stylesheet" href="chrome-extension://faleafcoahdigncejihhjllmdagdlpjk/unblock-style.css">
+	<meta name="description" content="Justify your reason for app usage.">
+	<meta name="author" content="JacobValore">
+	<script type="text/javascript" src="chrome-extension://faleafcoahdigncejihhjllmdagdlpjk/jquery-min.js"></script>
+	<script type="text/javascript" src="chrome-extension://faleafcoahdigncejihhjllmdagdlpjk/unblock-script.js"></script>
+</head>
+
+<body>
+	<div class="content">
+		<div class="header">
+			<div class="h-title">
+				Justify Blocker
+			</div>
+		</div>
+		<div class="warning">
+			<div class="w-text">
+				Are you sure you want to use <span class="w-site-name">example.com</span>?
+			</div>
+		</div>
+		<div class="justify">
+			<div class="j-label">
+				What are you going to use it for?
+			</div>
+			<textarea class="j-textarea" placeholder="Justify your reasons here..."></textarea>
+			<div class="j-info">
+				<div class="j-error-msg hidden">
+					More justification is needed.
+				</div>
+				<div class="j-expander"></div>
+				<div class="j-char-count">
+					<span class="j-cur-chars">0</span>/<span class="j-min-chars">200</span>
+				</div>
+			</div>
+		</div>
+		<div class="timing">
+			<div class="t-container">
+				<div class="t-inc left">-10</div>
+				<!-- <div class="t-inc mid" onclick="inc(-1)">-1</div> -->
+				<input class="t-time-input" type="number" value="10" step="1">
+				<!-- <div class="t-inc mid" onclick="inc(1)">+1</div> -->
+				<div class="t-inc right">+10</div>
+			</div>
+			<div class="t-label">
+				minutes
+			</div>
+		</div>
+		<div class="submit">
+			<button class="s-button">Unblock me.</button>
+		</div>
+	</div>
+	<div class="values_save hidden">
+		<div class="min_char_limit_val">0</div>
+		<div class="max_time_limit_val">1440</div>
+	</div>
+</body>
+</html>

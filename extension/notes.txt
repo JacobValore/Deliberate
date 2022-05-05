@@ -1,0 +1,22 @@
+fileBrowserHandler
+https://developer.chrome.com/docs/extensions/reference/fileBrowserHandler/
+fileSystemProvider
+https://developer.chrome.com/docs/extensions/reference/fileSystemProvider/
+storage
+https://developer.chrome.com/docs/extensions/reference/storage/
+management
+https://developer.chrome.com/docs/extensions/reference/management/
+
+
+favicon grabbing
+https://stackoverflow.com/questions/38599939/how-to-get-larger-favicon-from-googles-api
+https://www.google.com/s2/favicons?sz=64&domain_url=yahoo.com
+https://api.statvoo.com/favicon/?url=google.com
+https://github.com/ao/favicons
+https://api.faviconkit.com/twitter.com/64
+
+
+url_match.js
+https://github.com/fczbkk/UrlMatch
+match_pattern
+https://github.com/josefalcon/match-pattern

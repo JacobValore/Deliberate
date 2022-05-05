@@ -1,0 +1,165 @@
+:root {
+    --background: #282828;
+	--text: #e6e6e6;
+	/* For Buttons */
+	--blue: #0D95E8;
+	--hoverblue: #0C85D0;
+	/* For Other Buttons */
+	--buttonbg: #3c3c3c;
+	--hoverbuttonbg: #4f4f4f;
+}
+
+body{
+	width: 300px;
+    background-color: var(--background);
+	font-family: Helvetica, sans-serif;
+	color: var(--text);
+	margin: 0;
+	padding: 0;
+	/* border: 1px solid red; */
+}
+html{
+	width: 100%;
+	height: 100%;
+}
+p{
+	margin: 0;
+    padding: 0;
+}
+*{
+	box-sizing: border-box;
+}
+.hidden{
+	display: none !important;
+}
+
+/* Header */
+.header{
+	text-align: center;
+	font-size: 26px;
+	font-weight: bold;
+	user-select: none;
+	padding: 20px;
+}
+
+/* Block-Info */
+.block-info{
+	height: 160px;
+}
+.bi-unblocked{
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+}
+.ub-logo{
+	width: 64px;
+	height: 64px;
+	background-color: var(--hoverbuttonbg);
+	margin-bottom: 5px;
+}
+.ub-logo > img{
+	width: 100%;
+}
+.ub-header{
+	font-size: 15px;
+	margin-bottom: 10px;
+	user-select: none;
+}
+.ub-host{
+	font-weight: bold;
+}
+.ub-button{
+	color: white;
+	font-size: 18px;
+	padding: 8px 20px 8px 20px;
+	border-radius:7px;
+	background-color: var(--blue);
+	transition: background-color 0.2s;
+	user-select: none;
+	cursor: pointer;
+}
+.ub-button:hover{
+	background-color: var(--hoverblue);
+}
+.bi-blocked{
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+}
+.b-timer{
+	font-size: 18px;
+	text-align: center;
+	margin-bottom: 14px;
+	user-select: none;
+}
+.b-time{
+	font-size: 60px;
+}
+.b-rem{
+	display: block;
+	margin-top: -8px;
+}
+.b-button{
+	color: white;
+	font-size: 18px;
+	padding: 8px 20px 8px 20px;
+	border-radius:7px;
+	background-color: var(--blue);
+	transition: background-color 0.2s;
+	user-select: none;
+	cursor: pointer;
+}
+.b-button:hover{
+	background-color: var(--hoverblue);
+}
+
+/* Footer */
+.footer{
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	margin-bottom: 25px;
+	padding-bottom: 25px;
+}
+.f-buttons{
+	display: flex;
+	flex-direction: row;
+
+	margin-bottom: 15px;
+}
+.f-buttons > *{
+	padding: 10px;
+	background-color: var(--buttonbg);
+	transition: background-color 0.2s;
+	border: 1px solid var(--text);
+	border-radius: 7px;
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	cursor: pointer;
+}
+.f-buttons > *:hover{
+	background-color: var(--hoverbuttonbg);
+}
+.f-contact{
+	margin-right: 10px;
+}
+.c-logo > svg,
+.o-logo > svg{
+	fill: var(--text);
+}
+.c-text,
+.o-text{
+	padding-top: 5px;
+	font-size: 14px;
+	user-select: none;
+}
+.f-privacy{
+	font-size: 14px;
+	user-select: none;
+	cursor: pointer;
+	color: var(--blue);
+}
+.f-privacy:hover{
+	text-decoration: underline;
+}

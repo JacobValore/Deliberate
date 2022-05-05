@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="utf-8">
+	<title>Justify Blocker</title>
+	<link rel="shortcut icon" type="image/jpg" href="./icon.png"/>
+	<link rel="stylesheet" href="./options-style.css">
+	<meta name="description" content="Justify your reason for app usage.">
+	<meta name="author" content="Jacob Valore">
+	<script type="text/javascript" src="./jquery-min.js"></script>
+	<script type="text/javascript" src="./options-script.js"></script>
+</head>
+
+<body>
+	<div class="center">
+		<div class="header">
+			<div class="h-title">
+				Justify Blocker
+			</div>
+		</div>
+		<div class="settings">
+			<div class='s-char-lim'>
+				<input class="s-char-cb" type="checkbox" checked>
+				<div class="s-char-text">Minimum character limit:&nbsp</div>
+				<input class="s-char-val s-val" type="number" value="200">
+				<div class="s-char-text">&nbspcharacters</div>
+			</div>
+			<div class='s-time-lim'>
+				<input class="s-time-cb" type="checkbox">
+				<div class="s-time-text">Maximum time limit:&nbsp</div>
+				<input class="s-time-val s-val" type="number" value="60">
+				<div class="s-time-text">&nbspminutes</div>
+			</div>
+		</div>
+		<div class="blocks">
+			<div class="b-tabs">
+				<div class="b-web bt-w active">Websites</div>
+				<div class="b-app bt-a">Applications</div>
+			</div>
+			<div class="b-pages">
+				<div class="b-web active">
+					<div class="w-header">
+						<input class="w-input" type="text" placeholder="website.com">
+						<button class="w-add wh-a">+ Add</button>
+						<button class="w-remove wh-r">- Remove</button>
+					</div>
+					<div class="w-list"></div>
+				</div>
+				<div class="b-app">
+					<div class="a-header">
+						<input class="a-input" type="text" placeholder="application.exe">
+						<button class="a-add ah-a">+ Add</button>
+						<button class="a-remove ah-r">- Remove</button>
+					</div>
+					<div class="a-list"></div>
+				</div>
+			</div>
+		</div>
+	</div>
+</body>
+</html>

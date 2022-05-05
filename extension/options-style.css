@@ -1,0 +1,164 @@
+:root {
+    --background: white;
+	--text: black;
+
+	--textarea-bg: #F8FAFC;
+	--textarea-label: #6F7482;
+	--textarea-charcount: #6F7482;
+	--textarea-placeholder: #B8BCCA;
+	--textarea-text: #3B4256;
+	--textarea-error: #ED0131;
+
+	--button-hover: #f1f1f4;
+}
+
+body{
+	min-width: 550px;
+	min-height: 480px;
+	width: 100%;
+	height: 100%;
+    margin: 0;
+    padding: 20px;
+    background-color: var(--background);
+	font-family: Helvetica, sans-serif;
+	color: var(--textarea-text);
+
+	display: flex;
+	flex-direction: row;
+	justify-content: center;
+	align-items: center;
+}
+html{
+	width: 100%;
+	height: 100%;
+}
+p{
+	margin: 0;
+    padding: 0;
+}
+*{
+	box-sizing: border-box;
+}
+.hidden{
+	display: none !important;
+}
+
+/* Center */
+.center{
+	max-width: 550px;
+	max-height: 480px;
+	width: 100%;
+	height: 100%;
+}
+
+/* Header */
+.header{
+	display: flex;
+	flex-direction: row;
+	justify-content: center;
+
+	margin-bottom: 20px;
+}
+.h-title{
+	font-size: 30px;
+	font-weight: bold;
+	user-select: none;
+}
+
+/* Settings */
+.settings{
+	margin-bottom: 20px;
+}
+.s-char-lim,
+.s-time-lim{
+	padding: 5px;
+	font-size: 16px;
+	display: flex;
+	flex-direction: row;
+	align-items: center;
+}
+.s-char-val,
+.s-time-val{
+	font-size: 16px;
+	width: 60px;
+	text-align: right;
+}
+
+/* Blocks */
+.b-tabs{
+	display: flex;
+	flex-direction: row;
+	margin-left: 5px;
+}
+.b-tabs > *{
+	padding: 10px;
+	font-size: 20px;
+	color: var(--textarea-label);
+	border: 1.5px solid var(--background);
+	border-bottom: none;
+}
+.b-tabs > .active{
+	color: var(--textarea-text);
+	background-color: var(--textarea-bg);
+	border: 1.5px solid var(--textarea-placeholder);
+	border-bottom: none;
+	border-radius: 5px 5px 0px 0px;
+}
+.b-pages > *{
+	display: none;
+}
+.b-pages > .active{
+	display: block;
+	height: 250px;
+	padding: 10px;
+	background-color: var(--textarea-bg);
+	border: 1.5px solid var(--textarea-placeholder);
+	border-radius: 5px;
+}
+
+/* Block Pages */
+.b-pages > .b-web.active,
+.b-pages > .b-app.active{
+	display: flex;
+	flex-direction: column;
+}
+.w-header,
+.a-header{
+	flex-shrink: 0;
+	display: flex;
+	flex-direction: row;
+}
+.w-header > *,
+.a-header > *{
+	padding: 5px;
+	font-size: 16px;
+	border-radius: 5px;
+	border: 1.5px solid var(--textarea-placeholder);
+}
+.w-input,
+.a-input{
+	flex-grow: 1;
+	width: 10px;
+}
+.w-add,
+.a-add{
+	margin: 0px 10px 0px 10px;
+}
+.w-list,
+.a-list{
+	white-space: pre;
+	flex-grow: 1;
+	margin-top: 10px;
+	padding: 10px;
+	border: 1.5px solid var(--textarea-placeholder);
+	background-color: white;
+	border-radius: 5px;
+	text-align: center;
+}
+
+/* remove number input spinners */
+input[type=number]::-webkit-inner-spin-button,
+input[type=number]::-webkit-outer-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
