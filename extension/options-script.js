@@ -1,7 +1,6 @@
 $(document).ready(function(){
-	chrome.storage.local.get(['w_lines','a_lines','options'], function(result){
-		$('.w-list').html(result.w_lines.join("\n"));
-		$('.a-list').html(result.a_lines.join("\n"));
+	chrome.storage.local.get(['blocked_sites','options'], function(result){
+		$('.w-list').html(result.blocked_sites.join("\n"));
 		$('.s-char-cb').prop("checked", result.options.min_char_limit_bool);
 		$('.s-time-cb').prop("checked", result.options.max_time_limit_bool);
 		$('.s-char-val').val(result.options.min_char_limit_val);
@@ -41,18 +40,20 @@ $(document).ready(function(){
 			option_key: 'max_time_limit_val',
 			option_val: $(this).val()});
 	});
-	$('.bt-w').on("click", () => { tab('.b-web'); });
-	$('.bt-a').on("click", () => { tab('.b-app'); });
 	$('.wh-a').on("click", addWebsiteBlock);
 	$('.wh-r').on("click", removeWebsiteBlock);
-	$('.ah-a').on("click", addApplicationBlock);
-	$('.ah-r').on("click", removeApplicationBlock);
+	//DEPRECATED: Application Blocking
+	// $('.bt-w').on("click", () => { tab('.b-web'); });
+	// $('.bt-a').on("click", () => { tab('.b-app'); });
+	// $('.ah-a').on("click", addApplicationBlock);
+	// $('.ah-r').on("click", removeApplicationBlock);
 });
 
-function tab(selector){
-	$(".active").removeClass("active")
-	$(selector).addClass("active")
-}
+// DEPRECATED: Application Blocking
+// function tab(selector){
+// 	$(".active").removeClass("active")
+// 	$(selector).addClass("active")
+// }
 
 function addWebsiteBlock(){
 	if(!isValidURLMatchPattern($('.w-input').val())){
@@ -78,23 +79,24 @@ function removeWebsiteBlock(){
 	$('.w-input').val('');
 }
 
-function addApplicationBlock(){
-	var lines = $('.a-list').html().split('\n');
-	lines.push($('.a-input').val());
-	$('.a-list').html(lines.join('\n'));
-	$('.a-input').val('');
-	chrome.storage.local.set({'a_lines': lines});
-}
-
-function removeApplicationBlock(){
-	var lines = $('.a-list').html().split('\n');
-	lines = lines.filter(function(line){
-		return !line.includes($('.a-input').val());
-	});
-	$('.a-list').html(lines.join('\n'));
-	$('.a-input').val('');
-	chrome.storage.local.set({a_lines: lines});
-}
+// DEPRECATED: Application Blocking
+// function addApplicationBlock(){
+// 	var lines = $('.a-list').html().split('\n');
+// 	lines.push($('.a-input').val());
+// 	$('.a-list').html(lines.join('\n'));
+// 	$('.a-input').val('');
+// 	chrome.storage.local.set({'a_lines': lines});
+// }
+//
+// function removeApplicationBlock(){
+// 	var lines = $('.a-list').html().split('\n');
+// 	lines = lines.filter(function(line){
+// 		return !line.includes($('.a-input').val());
+// 	});
+// 	$('.a-list').html(lines.join('\n'));
+// 	$('.a-input').val('');
+// 	chrome.storage.local.set({a_lines: lines});
+// }
 
 function isValidURLMatchPattern(pattern) {
 	var scheme = "(\\*|http|https)"; //Allow "*", "http", or "https"

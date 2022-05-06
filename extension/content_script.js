@@ -1,8 +1,3 @@
-// document.body.style.display = 'none';
-// var temp = document.body.offsetHeight;
-// setTimeout(setup, 0);
-//
-// function setup() {
 $.get(chrome.runtime.getURL('./unblock.html'), (data) => {
 	//Replace webpage with block page
 	document.open("text/html","replace");
@@ -19,7 +14,6 @@ $.get(chrome.runtime.getURL('./unblock.html'), (data) => {
 		}
 	},0);
 });
-// }
 
 function init(){
 	chrome.runtime.sendMessage({reason: "GetMatchPattern"}, (response) => {

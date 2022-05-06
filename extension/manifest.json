@@ -1,6 +1,6 @@
 {
-	"name": "Justify Blocker",
-	"description": "Chrome Extension for Justify Blocker",
+	"name": "Deliberate",
+	"description": "The mindful website blocker.",
 	"version": "1.0",
 	"manifest_version": 3,
 	"icons": {

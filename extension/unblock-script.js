@@ -8,7 +8,7 @@ $(document).ready(function(){
 	// $('.s-button').on("click", () => {
 	// 	submit();
 	// });
-	$('.j-textarea').on('keyup', function () {
+	$('.j-textarea').on('keyup', function() {
 		var length = $(this).val().length;
 		$('.j-cur-chars').text(length);
 		if(length >= $('.j-min-chars').text()*1){
@@ -16,7 +16,7 @@ $(document).ready(function(){
 			$('.j-textarea').removeClass("error");
 		}
 	});
-	$('.t-time-input').on('focusout', function () {
+	$('.t-time-input').on('focusout', function() {
 		var value = $(this).val()*1;
 		if(value < 5)
 			$(this).val(5);
@@ -25,6 +25,9 @@ $(document).ready(function(){
 		else
 			$(this).val( Math.round(value) );
 	});
+	$('.j-textarea').bind('paste', (e) => {
+	    e.preventDefault();
+  	});
 });
 
 function inc(num){

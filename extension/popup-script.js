@@ -60,43 +60,6 @@ $(document).ready(function(){
 	});
 });
 
-//DEPRECATED: remove this soon
-function checkAllTabs(closePopup = false){
-	chrome.storage.local.get(['w_lines','w_unblocks'], (result) => {
-		//Remove unblocked websites from list and check if unblocks are expired
-		for(var [key, value] of Object.entries(result.w_unblocks)){
-			if(value < Date.now()){
-				delete result.w_unblocks[key];
-				continue;
-			}
-			//Since order doesn't matter, 'swap and pop' array removal is O(1) time
-			idx = result.w_lines.indexOf(key);
-			if(idx != -1){
-				result.w_lines[idx] = result.w_lines[result.w_lines.length-1]
-				result.w_lines.pop();
-			}
-		}
-		chrome.storage.local.set({w_unblocks: result.w_unblocks});
-		//Execute script on any tabs that need it
-		chrome.tabs.query({url: result.w_lines}, (tabs) => {
-			//Add all promises to array
-			promises = []
-			for(var i = 0; i < tabs.length; i++){
-				promises.push(chrome.scripting.executeScript({
-		            target: { tabId: tabs[i].id },
-		            files: ["./content_script.js"]
-				}));
-			}
-			//Popup may be closed once all promises are complete
-			if(closePopup){
-				Promise.all(promises).then(() => {
-					window.close();
-				});
-			}
-		});
-	});
-}
-
 function setupTimer(timeout){
 	if(Date.now()>timeout){
 		//This shouldn't happen, the unblock needs to be lifted in this case.

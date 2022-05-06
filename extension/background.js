@@ -1,13 +1,11 @@
 chrome.runtime.onInstalled.addListener((details) => {
 	//When extension is first installed, setup the storage variables
-	//The 'if true' and some items are entered for now, to allow quick testing
-	if(true || details.reason==="install"){
+	if(details.reason==="install"){
 		chrome.storage.local.set({
-			w_lines: [],
-			a_lines: [],
-			w_unblocks: {},
+			blocked_sites: [],
+			unblocked_sites: {},
 			options: {min_char_limit_bool: true,
-				min_char_limit_val: 200,
+				min_char_limit_val: 150,
 				max_time_limit_bool: false,
 				max_time_limit_val: 60}
 		});
@@ -18,25 +16,25 @@ chrome.tabs.onUpdated.addListener((tabId, changeInfo, tab) => {
 	//Fire event once, when the page is complete, and test if it's a webpage
     if(changeInfo.status === 'complete' && tab.url.startsWith('http')) {
 		//Get list of websites to block
-		chrome.storage.local.get(['w_lines','w_unblocks'], (result) => {
+		chrome.storage.local.get(['blocked_sites','unblocked_sites'], (result) => {
 			//Remove unblocked websites from list and check if unblocks are expired
-			for(var [key, value] of Object.entries(result.w_unblocks)){
+			for(var [key, value] of Object.entries(result.unblocked_sites)){
 				if(value < Date.now()){
-					delete result.w_unblocks[key];
+					delete result.unblocked_sites[key];
 					continue;
 				}
 				//Since order doesn't matter, 'swap and pop' array removal is O(1) time
-				idx = result.w_lines.indexOf(key);
+				idx = result.blocked_sites.indexOf(key);
 				if(idx != -1){
-					result.w_lines[idx] = result.w_lines[result.w_lines.length-1]
-					result.w_lines.pop();
+					result.blocked_sites[idx] = result.blocked_sites[result.blocked_sites.length-1]
+					result.blocked_sites.pop();
 				}
 			}
-			chrome.storage.local.set({w_unblocks: result.w_unblocks});
+			chrome.storage.local.set({unblocked_sites: result.unblocked_sites});
 			//Test url against list of blocked urls, unless everything is unblocked
-			if(result.w_lines.length==0)
+			if(result.blocked_sites.length==0)
 				return;
-			chrome.tabs.query({index:tab.index, windowId:tab.windowId, url: result.w_lines}, (tabs) => {
+			chrome.tabs.query({index:tab.index, windowId:tab.windowId, url: result.blocked_sites}, (tabs) => {
 				if(tabs.length===1){
 					//If blocked, inject content_script
 					chrome.scripting.executeScript({
@@ -50,9 +48,9 @@ chrome.tabs.onUpdated.addListener((tabId, changeInfo, tab) => {
 });
 
 chrome.alarms.onAlarm.addListener((alarm) => {
-	chrome.storage.local.get(['w_unblocks'], (result) => {
-		delete result.w_unblocks[alarm.name];
-		chrome.storage.local.set({w_unblocks: result.w_unblocks}, () => {
+	chrome.storage.local.get(['unblocked_sites'], (result) => {
+		delete result.unblocked_sites[alarm.name];
+		chrome.storage.local.set({unblocked_sites: result.unblocked_sites}, () => {
 			chrome.tabs.query({url: [alarm.name]}, (tabs) => {
 				for(var i = 0; i < tabs.length; i++){
 					chrome.scripting.executeScript({
@@ -92,23 +90,23 @@ chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
 //DEPRECATED it is unneccesary to check all tabs with the current implementation
 //I will leave it for now because it may be useful in the future again
 function checkAllTabs(){
-	chrome.storage.local.get(['w_lines','w_unblocks'], (result) => {
+	chrome.storage.local.get(['blocked_sites','unblocked_sites'], (result) => {
 		//Remove unblocked websites from list and check if unblocks are expired
-		for(var [key, value] of Object.entries(result.w_unblocks)){
+		for(var [key, value] of Object.entries(result.unblocked_sites)){
 			if(value < Date.now()){ //Checking if expired
-				delete result.w_unblocks[key];
+				delete result.unblocked_sites[key];
 				continue;
 			}
 			//Since order doesn't matter, 'swap and pop' array removal is O(1) time
-			idx = result.w_lines.indexOf(key);
+			idx = result.blocked_sites.indexOf(key);
 			if(idx != -1){
-				result.w_lines[idx] = result.w_lines[result.w_lines.length-1]
-				result.w_lines.pop();
+				result.blocked_sites[idx] = result.blocked_sites[result.blocked_sites.length-1]
+				result.blocked_sites.pop();
 			}
 		}
-		chrome.storage.local.set({w_unblocks: result.w_unblocks});
+		chrome.storage.local.set({unblocked_sites: result.unblocked_sites});
 		//Execute script on any tabs that need it
-		chrome.tabs.query({url: result.w_lines}, (tabs) => {
+		chrome.tabs.query({url: result.blocked_sites}, (tabs) => {
 			for(var i = 0; i < tabs.length; i++){
 				chrome.scripting.executeScript({
 		            target: { tabId: tabs[i].id },
@@ -122,12 +120,12 @@ function checkAllTabs(){
 function addBlock(message){
 	if(!isValidURLMatchPattern(message.matchPattern))
 		return;
-	chrome.storage.local.get(['w_lines'], (result) => {
-		idx = result.w_lines.indexOf(message.matchPattern);
+	chrome.storage.local.get(['blocked_sites'], (result) => {
+		idx = result.blocked_sites.indexOf(message.matchPattern);
 		if(idx !== -1)
 			return;
-		result.w_lines.push(message.matchPattern);
-		chrome.storage.local.set({w_lines: result.w_lines}, () => {
+		result.blocked_sites.push(message.matchPattern);
+		chrome.storage.local.set({blocked_sites: result.blocked_sites}, () => {
 			// Inject content script into all newly blocked tabs
 			chrome.tabs.query({url: message.matchPattern}, (tabs) => {
 				for(var i = 0; i < tabs.length; i++){
@@ -142,12 +140,12 @@ function addBlock(message){
 }
 
 function removeBlock(message){
-	chrome.storage.local.get(['w_lines'], (result) => {
-		idx = result.w_lines.indexOf(message.matchPattern);
+	chrome.storage.local.get(['blocked_sites'], (result) => {
+		idx = result.blocked_sites.indexOf(message.matchPattern);
 		if(idx !== -1){
-			result.w_lines[idx] = result.w_lines[result.w_lines.length-1]
-			result.w_lines.pop();
-			chrome.storage.local.set({w_lines: result.w_lines});
+			result.blocked_sites[idx] = result.blocked_sites[result.blocked_sites.length-1]
+			result.blocked_sites.pop();
+			chrome.storage.local.set({blocked_sites: result.blocked_sites});
 		}
 	});
 }
@@ -155,23 +153,23 @@ function removeBlock(message){
 function addUnblock(message){
 	if(message.unblockLength <= 1)
 		return;
-	chrome.storage.local.get(['w_lines','w_unblocks'], (result) => {
-		if(result.w_lines.indexOf(message.matchPattern)===-1)
+	chrome.storage.local.get(['blocked_sites','unblocked_sites'], (result) => {
+		if(result.blocked_sites.indexOf(message.matchPattern)===-1)
 			return;
 		var timeout = message.unblockLength*60000 + Date.now();
-		result.w_unblocks[message.matchPattern] = timeout;
+		result.unblocked_sites[message.matchPattern] = timeout;
 		chrome.alarms.create(message.matchPattern, {when: timeout});
-		chrome.storage.local.set({w_unblocks: result.w_unblocks});
+		chrome.storage.local.set({unblocked_sites: result.unblocked_sites});
 	});
 }
 
 function removeUnblock(message){
-	chrome.storage.local.get(['w_unblocks'], (result) => {
-		if(!(message.matchPattern in result.w_unblocks))
+	chrome.storage.local.get(['unblocked_sites'], (result) => {
+		if(!(message.matchPattern in result.unblocked_sites))
 			return;
-		delete result.w_unblocks[message.matchPattern];
+		delete result.unblocked_sites[message.matchPattern];
 		chrome.alarms.clear(message.matchPattern);
-		chrome.storage.local.set({w_unblocks: result.w_unblocks}, () => {
+		chrome.storage.local.set({unblocked_sites: result.unblocked_sites}, () => {
 			chrome.tabs.query({url: message.matchPattern}, (tabs) => {
 				for(var i = 0; i < tabs.length; i++){
 					chrome.scripting.executeScript({
@@ -209,15 +207,15 @@ function getPopupInfo(sender, sendResponse){
 			sendResponse(response);
 			return;
 		}
-		chrome.storage.local.get(['w_lines','w_unblocks'], (result) => {
+		chrome.storage.local.get(['blocked_sites','unblocked_sites'], (result) => {
 			//If nothing blocked, then there's no need to query
-			if(result.w_lines.length===0){
+			if(result.blocked_sites.length===0){
 				response.isBlocked = false;
 				sendResponse(response);
 				return;
 			}
 			//Check if the tab is blocked
-			chrome.tabs.query({active: true, currentWindow: true, url: result.w_lines}, (tabs) => {
+			chrome.tabs.query({active: true, currentWindow: true, url: result.blocked_sites}, (tabs) => {
 				//Add isBlocked item, if not blocked, popup doesn't need anything else
 				if(tabs.length===0){
 					response.isBlocked = false;
@@ -230,9 +228,9 @@ function getPopupInfo(sender, sendResponse){
 				response.timeout = 0;
 				var promises = [];
 				var entries = [];
-				for(var key in result.w_unblocks){
+				for(var key in result.unblocked_sites){
 					promises.push(chrome.tabs.query({active: true, currentWindow: true, url: [key]}));
-					entries.push([key, result.w_unblocks[key]]);
+					entries.push([key, result.unblocked_sites[key]]);
 				}
 				Promise.all(promises).then((results) => {
 					for(var i = 0; i < results.length; i++){
@@ -251,12 +249,12 @@ function getPopupInfo(sender, sendResponse){
 }
 
 function getMatchPattern(sender, sendResponse){
-	chrome.storage.local.get(['w_lines'], (result) => {
+	chrome.storage.local.get(['blocked_sites'], (result) => {
 		var promises = [];
 		var matchPatterns = [];
-		for(var i = 0; i < result.w_lines.length; i++){
-			promises.push(chrome.tabs.query({index:sender.tab.index, windowId:sender.tab.windowId, url: [result.w_lines[i]]}));
-			matchPatterns.push(result.w_lines[i]);
+		for(var i = 0; i < result.blocked_sites.length; i++){
+			promises.push(chrome.tabs.query({index:sender.tab.index, windowId:sender.tab.windowId, url: [result.blocked_sites[i]]}));
+			matchPatterns.push(result.blocked_sites[i]);
 		}
 		Promise.all(promises).then((results) => {
 			for(var i = 0; i < results.length; i++){
