@@ -39,7 +39,7 @@ chrome.tabs.onUpdated.addListener((tabId, changeInfo, tab) => {
 					//If blocked, inject content_script
 					chrome.scripting.executeScript({
 			            target: { tabId: tabs[0].id },
-			            files: ["./jquery-min.js", "./arrive-min.js", "./content_script.js"]
+			            files: ["./jquery-min.js", "./content_script.js"]
 					}).catch((err) => console.log(err));
 				}
 			});
@@ -55,7 +55,7 @@ chrome.alarms.onAlarm.addListener((alarm) => {
 				for(var i = 0; i < tabs.length; i++){
 					chrome.scripting.executeScript({
 			            target: { tabId: tabs[i].id },
-			            files: ["./jquery-min.js", "./arrive-min.js", "./content_script.js"]
+			            files: ["./jquery-min.js", "./content_script.js"]
 					});
 				}
 			});
@@ -110,7 +110,7 @@ function checkAllTabs(){
 			for(var i = 0; i < tabs.length; i++){
 				chrome.scripting.executeScript({
 		            target: { tabId: tabs[i].id },
-		            files: ["./jquery-min.js", "./arrive-min.js", "./content_script.js"]
+		            files: ["./jquery-min.js", "./content_script.js"]
 				});
 			}
 		});
@@ -131,7 +131,7 @@ function addBlock(message){
 				for(var i = 0; i < tabs.length; i++){
 					chrome.scripting.executeScript({
 			            target: { tabId: tabs[i].id },
-			            files: ["./jquery-min.js", "./arrive-min.js", "./content_script.js"]
+			            files: ["./jquery-min.js", "./content_script.js"]
 					});
 				}
 			});
@@ -174,7 +174,7 @@ function removeUnblock(message){
 				for(var i = 0; i < tabs.length; i++){
 					chrome.scripting.executeScript({
 			            target: { tabId: tabs[i].id },
-			            files: ["./jquery-min.js", "./arrive-min.js", "./content_script.js"]
+			            files: ["./jquery-min.js", "./content_script.js"]
 					});
 				}
 			});
