@@ -1,4 +1,6 @@
 $.get(chrome.runtime.getURL('./unblock.html'), (data) => {
+	//Find extension ID and replace it in the file
+	data = data.replaceAll('EXT_ID', chrome.runtime.id);
 	//Replace webpage with block page
 	document.open("text/html","replace");
 	document.write(data);
