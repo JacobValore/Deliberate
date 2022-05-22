@@ -1,20 +1,12 @@
 $.get(chrome.runtime.getURL('./unblock.html'), (data) => {
 	//Find extension ID and replace it in the file
 	data = data.replaceAll('EXT_ID', chrome.runtime.id);
-	//Replace webpage with block page
-	document.open("text/html","replace");
-	document.write(data);
-	document.close();
-	//setTimeout 0 to wait for document to update before trying to set the url text
-	setTimeout(function(){
-		if($('.w-site-name').length === 0){
-			$(document).arrive('.w-site-name', () => {
-				init();
-			});
-		} else{
-			init();
-		}
-	},0);
+	//Create the new DOM Node document of the "unblock" page
+	html = (new DOMParser()).parseFromString(data, "text/html").firstChild;
+	//Replace webpage with the new document
+	document.replaceChild(html, document.documentElement);
+	//Initialize url text and options
+	init();
 });
 
 function init(){
