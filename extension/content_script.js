@@ -36,5 +36,4 @@ function init(){
 			$('.max_time_limit_val').html(results.options.max_time_limit_val);
 		}
 	});
-	$(document).unbindArrive();
 }
