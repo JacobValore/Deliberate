@@ -1,7 +1,7 @@
 {
 	"name": "Deliberate",
 	"description": "The mindful website blocker.",
-	"version": "1.0",
+	"version": "0.3",
 	"manifest_version": 3,
 	"icons": {
 		"128": "/icon128.png"

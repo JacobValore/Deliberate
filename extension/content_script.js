@@ -10,6 +10,7 @@ $.get(chrome.runtime.getURL('./unblock.html'), (data) => {
 });
 
 function init(){
+	// Setup match pattern text
 	chrome.runtime.sendMessage({reason: "GetMatchPattern"}, (response) => {
 		$(".w-site-name").text(response.matchPattern);
 		($('.s-button')[0]).onclick = () => {
@@ -25,6 +26,7 @@ function init(){
 			}
 		};
 	});
+	// Setup character limit and time limit variables
 	chrome.storage.local.get(['options'], (results) => {
 		if(results.options.min_char_limit_bool){
 			$('.min_char_limit_val').html(results.options.min_char_limit_val);
@@ -36,4 +38,43 @@ function init(){
 			$('.max_time_limit_val').html(results.options.max_time_limit_val);
 		}
 	});
+	// Input Events
+	$('.t-inc.left').on("click", () => {
+		inc(-10);
+	});
+	$('.t-inc.right').on("click", () => {
+		inc(+10);
+	});
+	$('.t-time-input').on('focusout', function() {
+		var value = $(this).val()*1;
+		if(value < 5)
+			$(this).val(5);
+		else if(value > $('.max_time_limit_val').html()*1)
+			$(this).val($('.max_time_limit_val').html()*1);
+		else
+			$(this).val( Math.round(value) );
+	});
+	$('.j-textarea').on('keyup', function() {
+		var length = $(this).val().length;
+		$('.j-cur-chars').text(length);
+		if(length >= $('.j-min-chars').text()*1){
+			$('.j-error-msg').addClass("hidden");
+			$('.j-textarea').removeClass("error");
+		}
+	});
+	$('.j-textarea').bind('paste', (e) => {
+	    e.preventDefault();
+	});
+}
+
+function inc(num){
+	var newVal = +$(".t-time-input").val()+num
+	if(newVal <= 5)
+		$(".t-time-input").val(5);
+	else if(newVal > $('.max_time_limit_val').html()*1)
+		$(".t-time-input").val($('.max_time_limit_val').html()*1);
+	else{
+		$('.t-time-input').removeClass("error");
+		$(".t-time-input").val( +$(".t-time-input").val()+num );
+	}
 }
